@@ -1,5 +1,6 @@
 package net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,14 +55,18 @@ public class ApiService {
         ));
     }
 
-    // public List<RickAndMortyCharacter> getAllCharacters() {
-    //     int pageCount = 2;
-    //     for (int page = 1; page < pageCount; page++) {
-    //         RickAndMortyCharacterListResponse response = getCharacterListResponse(page);
-    //         PageInfo info = response.info();
-    //     }
-    //     return null;
-    // }
+    public List<RAMCharacter> getAllCharacters() {
+        int pageCount = 1;
+        ArrayList<RAMCharacter> characters = new ArrayList<>();
+        for (int page = 1; page <= pageCount; page++) {
+            RAMCharacterListResponse response = getCharacterListResponse(page);
+            if (response!=null) {
+                if (response.info   ()!=null) pageCount = response.info().pages();
+                if (response.results()!=null) characters.addAll(response.results());
+            }
+        }
+        return characters;
+    }
 
     public List<RAMCharacter> getCharactersPage(@Nullable Integer page) {
         RAMCharacterListResponse response = getCharacterListResponse(page);

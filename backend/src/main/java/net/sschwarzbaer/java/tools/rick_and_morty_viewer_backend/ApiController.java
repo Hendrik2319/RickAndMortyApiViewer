@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,26 +19,24 @@ import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMChar
 @RequiredArgsConstructor
 public class ApiController {
 
-    private final ApiService rickAndMortyCharacterService;
+    private final ApiService apiService;
 
-    // @GetMapping("/characters/all")
-    // public List<RickAndMortyCharacter> getAllCharacters(@PathVariable @Nullable String page) {
-    //     return rickAndMortyCharacterService.getAllCharacters();
-    // }
+    @GetMapping( { "/characters", "/characters/", "/characters/{page}" })
+    public ResponseEntity<List<RAMCharacter>> getCharactersPage(@PathVariable @Nullable String page) {
+        if (page!=null && page.toLowerCase().equals("all"))
+            return ResponseEntity.ok(apiService.getAllCharacters());
+        
+        Integer pageNo = null;
+        if (page!=null)
+            try { pageNo = Integer.parseInt(page); }
+            catch (NumberFormatException e) { return ResponseEntity.badRequest().build(); }
 
-    @GetMapping("/characters")
-    public List<RAMCharacter> getCharactersPage() {
-        return rickAndMortyCharacterService.getCharactersPage(null);
-    }
-
-    @GetMapping("/characters/{page}")
-    public List<RAMCharacter> getCharactersPageN(@PathVariable Integer page) {
-        return rickAndMortyCharacterService.getCharactersPage(page);
+        return ResponseEntity.ok(apiService.getCharactersPage(pageNo));
     }
 
     @GetMapping("/character/{id}")
     public ResponseEntity<RAMCharacter> getCharacter(@PathVariable @NonNull Integer id) {
-        return ResponseEntity.of(rickAndMortyCharacterService.getCharacterById(id));
+        return ResponseEntity.of(apiService.getCharacterById(id));
     }
     
 }
