@@ -18,10 +18,14 @@ public class ApiService {
 
     private final WebClient webClient;
     public final CharacterService characters;
+    public final LocationService locations;
+    public final EpisodeService episodes;
 
     public ApiService() {
         this.webClient = WebClient.create("https://rickandmortyapi.com/api");
         characters = new CharacterService();
+        locations = new LocationService();
+        episodes = new EpisodeService();
     }
 
     private <ResponseType> ResponseType getResponse(@NonNull String uri, @NonNull Class<ResponseType> clazz) {
@@ -47,6 +51,18 @@ public class ApiService {
     {
         CharacterService() { super("/character", RAMCharacter.class, ListType.class); }
         private static class ListType extends RAMListResponse<RAMCharacter> {}
+    }
+
+    public class LocationService extends GenericApiService<RAMLocation, LocationService.ListType>
+    {
+        LocationService() { super("/location", RAMLocation.class, ListType.class); }
+        private static class ListType extends RAMListResponse<RAMLocation> {}
+    }
+
+    public class EpisodeService extends GenericApiService<RAMEpisode, EpisodeService.ListType>
+    {
+        EpisodeService() { super("/episode", RAMEpisode.class, ListType.class); }
+        private static class ListType extends RAMListResponse<RAMEpisode> {}
     }
 
     private class GenericApiService<ItemType, ListResponseType extends RAMListResponse<ItemType>> {
