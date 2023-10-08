@@ -17,9 +17,11 @@ import reactor.core.publisher.Mono;
 public class ApiService {
 
     private final WebClient webClient;
+    public final CharacterService characters;
 
     public ApiService() {
         this.webClient = WebClient.create("https://rickandmortyapi.com/api");
+        characters = new CharacterService();
     }
 
     private <ResponseType> ResponseType getResponse(@NonNull String uri, @NonNull Class<ResponseType> clazz) {
@@ -41,36 +43,55 @@ public class ApiService {
         return responseEntity.getBody();
     }
 
-    private RAMCharacterListResponse getCharacterListResponse(@Nullable Integer page) {
-        return getResponse(
-            "/character" + (page==null ? "" : "?page="+page),
-            RAMCharacterListResponse.class
-        );
+    public class CharacterService extends GenericApiService<RAMCharacter, CharacterService.ListType>
+    {
+        CharacterService() { super("/character", RAMCharacter.class, ListType.class); }
+        private static class ListType extends RAMListResponse<RAMCharacter> {}
     }
 
-    public Optional<RAMCharacter> getCharacterById(@NonNull Integer id) {
-        return Optional.ofNullable(getResponse(
-            "/character/"+id,
-            RAMCharacter.class
-        ));
-    }
+    private class GenericApiService<ItemType, ListResponseType extends RAMListResponse<ItemType>> {
 
-    public List<RAMCharacter> getAllCharacters() {
-        int pageCount = 1;
-        ArrayList<RAMCharacter> characters = new ArrayList<>();
-        for (int page = 1; page <= pageCount; page++) {
-            RAMCharacterListResponse response = getCharacterListResponse(page);
-            if (response!=null) {
-                if (response.info   ()!=null) pageCount = response.info().pages();
-                if (response.results()!=null) characters.addAll(response.results());
-            }
+        private final @NonNull String basePath;
+        private final @NonNull Class<ItemType> itemClass;
+        private final @NonNull Class<ListResponseType> listResponseClass;
+
+        GenericApiService(@NonNull String basePath, @NonNull Class<ItemType> itemClass, @NonNull Class<ListResponseType> listResponseClass) {
+            this.basePath = basePath;
+            this.itemClass = itemClass;
+            this.listResponseClass = listResponseClass;
         }
-        return characters;
-    }
 
-    public List<RAMCharacter> getCharactersPage(@Nullable Integer page) {
-        RAMCharacterListResponse response = getCharacterListResponse(page);
-        return response==null ? List.of() : response.results();
+        private ListResponseType getListResponse(@Nullable Integer page) {
+            return getResponse(
+                basePath + (page==null ? "" : "?page="+page),
+                listResponseClass
+            );
+        }
+
+        public Optional<ItemType> getById(@NonNull Integer id) {
+            return Optional.ofNullable(getResponse(
+                basePath+"/"+id,
+                itemClass
+            ));
+        }
+
+        public List<ItemType> getAll() {
+            int pageCount = 1;
+            ArrayList<ItemType> items = new ArrayList<>();
+            for (int page = 1; page <= pageCount; page++) {
+                ListResponseType response = getListResponse(page);
+                if (response!=null) {
+                    if (response.info   !=null) pageCount = response.info.pages();
+                    if (response.results!=null) items.addAll(response.results);
+                }
+            }
+            return items;
+        }
+
+        public List<ItemType> getPage(@Nullable Integer page) {
+            ListResponseType response = getListResponse(page);
+            return response==null ? List.of() : response.results;
+        }
     }
     
 }
