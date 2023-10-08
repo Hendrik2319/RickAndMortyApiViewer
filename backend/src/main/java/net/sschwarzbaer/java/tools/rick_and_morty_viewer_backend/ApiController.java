@@ -21,22 +21,31 @@ public class ApiController {
 
     private final ApiService apiService;
 
-    @GetMapping( { "/characters", "/characters/", "/characters/{page}" })
-    public ResponseEntity<List<RAMCharacter>> getCharactersPage(@PathVariable @Nullable String page) {
-        if (page!=null && page.toLowerCase().equals("all"))
-            return ResponseEntity.ok(apiService.getAllCharacters());
-        
-        Integer pageNo = null;
-        if (page!=null)
-            try { pageNo = Integer.parseInt(page); }
-            catch (NumberFormatException e) { return ResponseEntity.badRequest().build(); }
-
-        return ResponseEntity.ok(apiService.getCharactersPage(pageNo));
+    @GetMapping( { "/characters", "/characters/" })
+    public List<RAMCharacter> getCharactersPage1() {
+        return apiService.getCharactersPage(null);
     }
 
-    @GetMapping("/character/{id}")
-    public ResponseEntity<RAMCharacter> getCharacter(@PathVariable @NonNull Integer id) {
-        return ResponseEntity.of(apiService.getCharacterById(id));
+    @GetMapping( "/characters/{page}" )
+    public ResponseEntity<List<RAMCharacter>> getCharactersPageN(@PathVariable String page) {
+        try { return ResponseEntity.ok(apiService.getCharactersPage(Integer.parseInt(page))); }
+        catch (NumberFormatException e) {}
+        
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping( "/characters/all" )
+    public List<RAMCharacter> getAllCharacters() {
+        return apiService.getAllCharacters();
+    }
+
+    @GetMapping( { "/character", "/character/", "/character/{id}" } )
+    public ResponseEntity<RAMCharacter> getCharacter(@PathVariable @Nullable String id) {
+        if (id!=null)
+            try { return ResponseEntity.of(apiService.getCharacterById(Integer.parseInt(id))); }
+            catch (NumberFormatException e) {}
+        
+        return ResponseEntity.badRequest().build();
     }
     
 }
