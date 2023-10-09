@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <script>
+            let urls = [
+                "/api/characters",
+                "/api/characters/1",
+                "/api/characters/2",
+                "/api/characters/all",
+                "/api/character/1",
+                "/api/character/2",
+                "/api/character/3",
+                "/api/character/4",
+            ];
+            urls.forEach(url => {
+                document.writeln('<a href="'+url+'" target="_blank">'+url+'</a><br/>')
+            });
+        </script>
+    </body>
+</html>

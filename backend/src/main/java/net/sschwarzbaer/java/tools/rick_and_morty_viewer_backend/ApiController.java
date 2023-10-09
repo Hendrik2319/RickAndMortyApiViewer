@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.ApiService;
-import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMCharacter;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.Converter;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.RestCharacter;
 
 @RestController
 @RequestMapping("api")
@@ -21,27 +22,51 @@ public class ApiController {
     private final ApiService apiService;
 
     @GetMapping( { "/characters", "/characters/" })
-    public List<RAMCharacter> getCharactersPage1() {
-        return apiService.characters.getPage(null);
+    public List<RestCharacter> getCharactersPage1() {
+        return Converter.convert(
+            apiService.characters.getPage(null),
+            "getCharactersPage1()"
+        );
     }
 
     @GetMapping( "/characters/{page}" )
-    public ResponseEntity<List<RAMCharacter>> getCharactersPageN(@PathVariable String page) {
-        try { return ResponseEntity.ok(apiService.characters.getPage(Integer.parseInt(page))); }
+    public ResponseEntity<List<RestCharacter>> getCharactersPageN(@PathVariable String page) {
+        try {
+            return ResponseEntity.ok(
+                Converter.convert(
+                    apiService.characters.getPage(
+                        Integer.parseInt(page)
+                    ),
+                    "getCharactersPageN(\"%s\")".formatted(page)
+                )
+            );
+        }
         catch (NumberFormatException e) {}
         
         return ResponseEntity.badRequest().build();
     }
 
     @GetMapping( "/characters/all" )
-    public List<RAMCharacter> getAllCharacters() {
-        return apiService.characters.getAll();
+    public List<RestCharacter> getAllCharacters() {
+        return Converter.convert(
+            apiService.characters.getAll(),
+            "getAllCharacters()"
+        );
     }
 
     @GetMapping( { "/character", "/character/", "/character/{id}" } )
-    public ResponseEntity<RAMCharacter> getCharacter(@PathVariable @Nullable String id) {
+    public ResponseEntity<RestCharacter> getCharacter(@PathVariable @Nullable String id) {
         if (id!=null)
-            try { return ResponseEntity.of(apiService.characters.getById(Integer.parseInt(id))); }
+            try {
+                return ResponseEntity.of(
+                    Converter.convert(
+                        apiService.characters.getById(
+                            Integer.parseInt(id)
+                        ),
+                        "getCharacter(\"%s\")".formatted(id)
+                    )
+                );
+            }
             catch (NumberFormatException e) {}
         
         return ResponseEntity.badRequest().build();
