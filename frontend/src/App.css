@@ -1,3 +1,8 @@
+h1 a {
+    text-decoration: none;
+    color: black;
+}
+
 .CharactersList {
     display: flex;
     flex-direction: row;
@@ -16,3 +21,20 @@
 .CharacterImage {
     width: 120px;
 }
+
+/* 
+.ValueOutputField {
+}
+ */
+
+.ValueOutputField .Name {
+    color: #96c0ff;
+    font-size: 0.6em;
+}
+
+.ValueOutputField .Value {
+    margin-left: 5px;
+    max-width: 115px;
+}
+
+

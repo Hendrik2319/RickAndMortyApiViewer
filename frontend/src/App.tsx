@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import './App.css'
 import axios from 'axios';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate, Link } from 'react-router-dom';
 import CharactersPage from './components/CharactersPage';
 
 export default function App() {
 	const [helloText, setHelloText] = useState<string>("");
 
     useEffect(loadHelloText, []);
+    const navigate = useNavigate();
 
     function loadHelloText (){
         axios.get("/api/hello")
@@ -23,9 +24,17 @@ export default function App() {
 
 	return (
 		<>
-			<h1>Rick & Morty API - Viewer</h1>
+            <h1><Link to="/">Rick & Morty API - Viewer</Link></h1>
+            <nav>
+                <button onClick={()=>navigate("/characters")}>Characters</button>
+                <button onClick={()=>navigate("/episodes"  )}>Episodes  </button>
+                <button onClick={()=>navigate("/locations" )}>Locations </button>
+            </nav>
             <Routes>
                 <Route path='/' element={
+                    <CharactersPage/>
+                }/>
+                <Route path='/characters' element={
                     <CharactersPage/>
                 }/>
                 <Route path='/hello' element={
