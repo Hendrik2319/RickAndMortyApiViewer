@@ -1,10 +1,7 @@
 <html>
-    <head>
-        <title></title>
-    </head>
     <body>
         <script>
-            let urls = [
+            [
                 "/api/character",
                 "/api/character?page=1",
                 "/api/character?page=2",
@@ -14,8 +11,16 @@
                 "/api/character/2",
                 "/api/character/3",
                 "/api/character/4",
-            ];
-            urls.forEach(url => {
+                "/api/episode",
+                "/api/episode?page=1",
+                "/api/episode?page=2",
+                "/api/episode?page=all",
+                "/api/episode/",
+                "/api/episode/1",
+                "/api/episode/2",
+                "/api/episode/3",
+                "/api/episode/4",
+            ].forEach(url => {
                 document.writeln('<a href="'+url+'" target="_blank">'+url+'</a><br/>')
             });
         </script>

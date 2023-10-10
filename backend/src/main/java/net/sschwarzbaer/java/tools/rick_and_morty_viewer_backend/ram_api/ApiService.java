@@ -17,9 +17,9 @@ import reactor.core.publisher.Mono;
 public class ApiService {
 
     private final WebClient webClient;
-    public final CharacterService characters;
-    public final LocationService locations;
-    public final EpisodeService episodes;
+    public final @NonNull CharacterService characters;
+    public final @NonNull LocationService locations;
+    public final @NonNull EpisodeService episodes;
 
     public ApiService() {
         this.webClient = WebClient.create("https://rickandmortyapi.com/api");
@@ -65,7 +65,13 @@ public class ApiService {
         private static class ListType extends RAMListResponse<RAMEpisode> {}
     }
 
-    private class GenericApiService<ItemType, ListResponseType extends RAMListResponse<ItemType>> {
+    public interface GenericApiServiceInt<ItemType> {
+        List<ItemType> getAll();
+        List<ItemType> getPage(@Nullable Integer page);
+        Optional<ItemType> getById(int id);
+    }
+
+    private class GenericApiService<ItemType, ListResponseType extends RAMListResponse<ItemType>> implements GenericApiServiceInt<ItemType> {
 
         private final @NonNull String basePath;
         private final @NonNull Class<ItemType> itemClass;
@@ -84,7 +90,7 @@ public class ApiService {
             );
         }
 
-        public Optional<ItemType> getById(@NonNull Integer id) {
+        public Optional<ItemType> getById(int id) {
             return Optional.ofNullable(getResponse(
                 basePath+"/"+id,
                 itemClass
