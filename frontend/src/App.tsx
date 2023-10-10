@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import './App.css'
 import axios from 'axios';
+import { Route, Routes } from 'react-router-dom';
+import CharactersPage from './components/CharactersPage';
 
 export default function App() {
 	const [helloText, setHelloText] = useState<string>("");
@@ -22,7 +24,14 @@ export default function App() {
 	return (
 		<>
 			<h1>Rick & Morty API - Viewer</h1>
-			Response: {helloText}
+            <Routes>
+                <Route path='/' element={
+                    <>
+            			Response: {helloText}
+                        <CharactersPage/>
+                    </>
+                }/>
+            </Routes>
 		</>
 	)
 }
