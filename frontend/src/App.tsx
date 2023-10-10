@@ -26,9 +26,11 @@ export default function App() {
 			<h1>Rick & Morty API - Viewer</h1>
             <Routes>
                 <Route path='/' element={
+                    <CharactersPage/>
+                }/>
+                <Route path='/hello' element={
                     <>
             			Response: {helloText}
-                        <CharactersPage/>
                     </>
                 }/>
             </Routes>
