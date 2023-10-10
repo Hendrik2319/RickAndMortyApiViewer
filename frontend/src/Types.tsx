@@ -19,3 +19,12 @@ export type Location = {
     name: string,
     locationId: number | null,
 }
+
+export type Episode = {
+    id         : number   // id of the episode
+    name       : string   // name of the episode
+    air_date   : string   // air date of the episode
+    episode    : string   // code of the episode
+    characters : number[] // List of characters who have been seen in the episode
+    created    : string   // Time at which the episode was created in the database
+}

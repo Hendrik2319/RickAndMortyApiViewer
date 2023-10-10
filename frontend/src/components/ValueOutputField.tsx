@@ -1,3 +1,4 @@
+import '../App.css'
 
 type Props = {
     name: string

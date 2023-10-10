@@ -1,26 +1,21 @@
 import '../App.css'
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Character } from "../Types";
-import CharacterCard from "./CharacterCard";
+import { Episode } from "../Types";
+import EpisodeCard from "./EpisodeCard";
 
-/*
-type Props = {
-
-}
- */
-export default function CharactersPage( /* props:Props */ ) {
+export default function EpisodesPage() {
     const [page, setPage] = useState<number>(1);
-    const [characters, setCharacters] = useState<Character[]>([]);
+    const [episodes, setEpisodes] = useState<Episode[]>([]);
 
     useEffect( loadPage, [ page ] );
 
     function loadPage() {
-        axios.get("/api/character?page="+page)
+        axios.get("/api/episode?page="+page)
             .then((response) => {
                 if (response.status!==200)
-                    throw "Get wrong response status, when loading characters page "+page+": "+response.status;
-                    setCharacters(response.data);
+                    throw "Get wrong response status, when loading episodes page "+page+": "+response.status;
+                    setEpisodes(response.data);
             })
             .catch((error)=>{
                 console.error(error);
@@ -38,7 +33,7 @@ export default function CharactersPage( /* props:Props */ ) {
             {page}
             <button onClick={()=>switchPage(+1)}>&gt;</button>
             <div className="ItemsList">
-                {characters.map( ch => <CharacterCard key={ch.id} character={ch}/> )}
+                {episodes.map( ch => <EpisodeCard key={ch.id} episode={ch}/> )}
             </div>
         </>
     )

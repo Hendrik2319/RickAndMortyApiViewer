@@ -3,13 +3,13 @@ h1 a {
     color: black;
 }
 
-.CharactersList {
+.ItemsList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.CharacterCard {
+.ItemCard {
     border: 1px solid #cadfff;
     background-color: #f3f7ff;
     border-radius: 0.5em;
