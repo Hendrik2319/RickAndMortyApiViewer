@@ -27,26 +27,26 @@ import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.RestLocati
 @RequestMapping("api")
 public class ApiController {
 
-    private final GenericController<RestCharacter, RAMCharacter> characterController;
-    private final GenericController<RestEpisode  , RAMEpisode  > episodeController;
+    private final GenericController<RestCharacter, RAMCharacter> charactersController;
+    private final GenericController<RestEpisode  , RAMEpisode  > episodesController;
     private final GenericController<RestLocation , RAMLocation > locationsController;
 
     public ApiController(ApiService apiService) {
-        characterController = new GenericController<>("Character", Converter.characters, apiService.characters);
-        episodeController   = new GenericController<>("Episode"  , Converter.episodes  , apiService.episodes  );
-        locationsController = new GenericController<>("Location" , Converter.locations  , apiService.locations  );
+        charactersController = new GenericController<>("Character", Converter.characters, apiService.characters);
+        episodesController   = new GenericController<>("Episode"  , Converter.episodes  , apiService.episodes  );
+        locationsController  = new GenericController<>("Location" , Converter.locations , apiService.locations );
     }
 
 
     @GetMapping( { "/character", "/character/" })
-    public ResponseEntity<List<RestCharacter>> getCharactersPage(@RequestParam @Nullable String page) { return characterController.getItemPage( page ); }
+    public ResponseEntity<List<RestCharacter>> getCharactersPage(@RequestParam @Nullable String page) { return charactersController.getItemPage( page ); }
     @GetMapping( { "/character/{id}" } )
-    public ResponseEntity<RestCharacter> getCharacter(@PathVariable @NonNull String id) { return characterController.getItem( id ); }
+    public ResponseEntity<RestCharacter> getCharacter(@PathVariable @NonNull String id) { return charactersController.getItem( id ); }
 
     @GetMapping( { "/episode", "/episode/" })
-    public ResponseEntity<List<RestEpisode>> getEpisodesPage(@RequestParam @Nullable String page) { return episodeController.getItemPage( page ); }
+    public ResponseEntity<List<RestEpisode>> getEpisodesPage(@RequestParam @Nullable String page) { return episodesController.getItemPage( page ); }
     @GetMapping( { "/episode/{id}" } )
-    public ResponseEntity<RestEpisode> getEpisode(@PathVariable @NonNull String id) { return episodeController.getItem( id ); }
+    public ResponseEntity<RestEpisode> getEpisode(@PathVariable @NonNull String id) { return episodesController.getItem( id ); }
 
     @GetMapping( { "/location", "/location/" })
     public ResponseEntity<List<RestLocation>> getLocationsPage(@RequestParam @Nullable String page) { return locationsController.getItemPage( page ); }

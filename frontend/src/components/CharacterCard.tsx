@@ -29,8 +29,8 @@ export type Character = {
     species : string  , // species of the character
     type    : string  , // type or subspecies of the character
     gender  : Gender  , // gender of the character ('Female', 'Male', 'Genderless' or 'unknown')
-    origin  : Location, // Name and link to the character's origin location
-    location: Location, // Name and link to the character's last known location endpoint
+    origin  : LocationInfo, // Name and link to the character's origin location
+    location: LocationInfo, // Name and link to the character's last known location endpoint
     image   : string  , // Link to the character's image. All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars
     episodes: number[], // List of episodes in which this character appeared
     created : string  ,  // Time at which the character was created in the database
