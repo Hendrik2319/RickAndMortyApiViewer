@@ -8,9 +8,35 @@ import org.springframework.lang.NonNull;
 
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMCharacter;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMEpisode;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMLocation;
 
 public class Converter
 {
+    public static final @NonNull GenericConverter<RestLocation, RAMLocation> locations = new GenericConverter<>()
+    {
+        @Override
+        public RestLocation convert(RAMLocation location, String source)
+        {
+            if (location==null)
+                return null;
+
+            source += ".Episode{ id:%s }".formatted(location.id());
+
+            String expectedLocationURL = "https://rickandmortyapi.com/api/location/%d".formatted(location.id());
+            if (!expectedLocationURL.equals(location.url()))
+                System.err.printf("%s: Location-Url \"%s\" does not equal expected value \"%s\".%n", source, location.url(), expectedLocationURL);
+
+            return new RestLocation(
+                location.id(),
+                location.name(),
+                location.type(),
+                location.dimension(),
+                getIDs(location.residents(), "https://rickandmortyapi.com/api/character/", "Character", source+".residents"),
+                location.created()
+            );
+        }
+    };
+    
     public static final @NonNull GenericConverter<RestEpisode, RAMEpisode> episodes = new GenericConverter<>()
     {
         @Override
@@ -66,14 +92,14 @@ public class Converter
         }
     };
     
-    public interface GenericConverterInt<RestType, RAMType>
+    public interface GenericConverterInterface<RestType, RAMType>
     {
         RestType convert(RAMType character, String source);
         Optional<RestType> convert(Optional<RAMType> value, String source);
         List<RestType> convert(List<RAMType> values, String source);
     }
 
-    public static abstract class GenericConverter<RestType, RAMType> implements GenericConverterInt<RestType, RAMType>
+    public static abstract class GenericConverter<RestType, RAMType> implements GenericConverterInterface<RestType, RAMType>
     {
         @Override
         public abstract RestType convert(RAMType character, String source);

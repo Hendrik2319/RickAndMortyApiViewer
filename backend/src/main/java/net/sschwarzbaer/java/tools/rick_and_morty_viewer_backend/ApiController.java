@@ -16,10 +16,12 @@ import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.ApiServ
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.ApiService.GenericApiServiceInt;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMCharacter;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMEpisode;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.ram_api.RAMLocation;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.Converter;
-import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.Converter.GenericConverterInt;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.Converter.GenericConverterInterface;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.RestCharacter;
 import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.RestEpisode;
+import net.sschwarzbaer.java.tools.rick_and_morty_viewer_backend.rest.RestLocation;
 
 @RestController
 @RequestMapping("api")
@@ -27,31 +29,36 @@ public class ApiController {
 
     private final GenericController<RestCharacter, RAMCharacter> characterController;
     private final GenericController<RestEpisode  , RAMEpisode  > episodeController;
+    private final GenericController<RestLocation , RAMLocation > locationsController;
 
     public ApiController(ApiService apiService) {
         characterController = new GenericController<>("Character", Converter.characters, apiService.characters);
         episodeController   = new GenericController<>("Episode"  , Converter.episodes  , apiService.episodes  );
+        locationsController = new GenericController<>("Location" , Converter.locations  , apiService.locations  );
     }
 
 
     @GetMapping( { "/character", "/character/" })
     public ResponseEntity<List<RestCharacter>> getCharactersPage(@RequestParam @Nullable String page) { return characterController.getItemPage( page ); }
-
-    @GetMapping( { "/episode", "/episode/" })
-    public ResponseEntity<List<RestEpisode  >> getEpisodesPage  (@RequestParam @Nullable String page) { return   episodeController.getItemPage( page ); }
-
     @GetMapping( { "/character/{id}" } )
     public ResponseEntity<RestCharacter> getCharacter(@PathVariable @NonNull String id) { return characterController.getItem( id ); }
 
+    @GetMapping( { "/episode", "/episode/" })
+    public ResponseEntity<List<RestEpisode>> getEpisodesPage(@RequestParam @Nullable String page) { return episodeController.getItemPage( page ); }
     @GetMapping( { "/episode/{id}" } )
-    public ResponseEntity<RestEpisode  > getEpisode  (@PathVariable @NonNull String id) { return   episodeController.getItem( id ); }
+    public ResponseEntity<RestEpisode> getEpisode(@PathVariable @NonNull String id) { return episodeController.getItem( id ); }
+
+    @GetMapping( { "/location", "/location/" })
+    public ResponseEntity<List<RestLocation>> getLocationsPage(@RequestParam @Nullable String page) { return locationsController.getItemPage( page ); }
+    @GetMapping( { "/location/{id}" } )
+    public ResponseEntity<RestLocation> getLocation(@PathVariable @NonNull String id) { return locationsController.getItem( id ); }
 
 
     @RequiredArgsConstructor
     private static class GenericController<RestType, RAMType>
     {
         private final @NonNull String itemLabel;
-        private final @NonNull GenericConverterInt<RestType, RAMType> converter;
+        private final @NonNull GenericConverterInterface<RestType, RAMType> converter;
         private final @NonNull GenericApiServiceInt<RAMType> apiService;
 
         ResponseEntity<List<RestType>> getItemPage( @Nullable String page )
