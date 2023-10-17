@@ -8,6 +8,7 @@ import LocationPage from './components/LocationPage';
 
 export default function App() {
 	const [helloText, setHelloText] = useState<string>("");
+    console.debug("Rendering App()");
 
     useEffect(loadHelloText, []);
     const navigate = useNavigate();
@@ -28,17 +29,14 @@ export default function App() {
 		<>
             <h1><Link to="/">Rick & Morty API - Viewer</Link></h1>
             <nav>
-                <button onClick={()=>navigate("/characters")}>Characters</button>
-                <button onClick={()=>navigate("/episodes"  )}>Episodes  </button>
-                <button onClick={()=>navigate("/locations" )}>Locations </button>
+                <button onClick={()=>navigate("/characters/1")}>Characters</button>
+                <button onClick={()=>navigate("/episodes/1"  )}>Episodes  </button>
+                <button onClick={()=>navigate("/locations/1" )}>Locations </button>
             </nav>
             <Routes>
                 <Route path='/'                 element={<CharactersPage/>}/>
-                <Route path='/characters'       element={<CharactersPage/>}/>
                 <Route path='/characters/:page' element={<CharactersPage/>}/>
-                <Route path='/episodes'         element={<EpisodesPage/>}/>
                 <Route path='/episodes/:page'   element={<EpisodesPage/>}/>
-                <Route path='/locations'        element={<LocationPage/>}/>
                 <Route path='/locations/:page'  element={<LocationPage/>}/>
                 <Route path='/hello'            element={<>Response: {helloText}</>}/>
             </Routes>
