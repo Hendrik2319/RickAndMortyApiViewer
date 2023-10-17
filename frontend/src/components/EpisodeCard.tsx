@@ -1,4 +1,4 @@
-import '../App.css'
+import '../App.css';
 import { Episode } from "../Types";
 import ValueOutputField from "./ValueOutputField";
 

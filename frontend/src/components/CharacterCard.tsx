@@ -1,4 +1,4 @@
-import '../App.css'
+import '../App.css';
 import { Character } from "../Types";
 import ValueOutputField from "./ValueOutputField";
 

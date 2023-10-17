@@ -1,19 +1,27 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import '../App.css';
 
 
 export type Props<Type> = {
-    apiPath: string // /api/location
-    itemLabel_LC: string // locations
-    createCard: (item:Type) => JSX.Element // ch => <LocationCard key={ch.id} location={ch}/>
+    apiPath: string
+    itemLabel_LC: string
+    createCard: (item:Type) => JSX.Element
 };
 
 export default function GenericPage<Type>( props: Props<Type>) {
     const [page, setPage] = useState<number>(1);
     const [locations, setLocations] = useState<Type[]>([]);
+    const { page: initialPage } = useParams();
 
     useEffect( loadPage, [ page ] );
+    useEffect( setInitialPage, [ initialPage ] );
+
+    function setInitialPage() {
+        if (initialPage)
+            setPage( parseInt( initialPage ));
+    }
 
     function loadPage() {
         axios.get(props.apiPath+"?page="+page)

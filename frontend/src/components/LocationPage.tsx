@@ -1,7 +1,7 @@
 import '../App.css';
 import { Location } from "../Types";
-import LocationCard from "./LocationCard";
 import GenericPage from './GenericPage';
+import LocationCard from "./LocationCard";
 
 export default function LocationPage() {
     return GenericPage<Location>({

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import './App.css'
 import axios from 'axios';
-import { Route, Routes, useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import './App.css';
 import CharactersPage from './components/CharactersPage';
 import EpisodesPage from './components/EpisodesPage';
 import LocationPage from './components/LocationPage';
@@ -33,11 +33,14 @@ export default function App() {
                 <button onClick={()=>navigate("/locations" )}>Locations </button>
             </nav>
             <Routes>
-                <Route path='/'           element={<CharactersPage/>}/>
-                <Route path='/characters' element={<CharactersPage/>}/>
-                <Route path='/episodes'   element={<EpisodesPage/>}/>
-                <Route path='/locations'  element={<LocationPage/>}/>
-                <Route path='/hello'      element={<>Response: {helloText}</>}/>
+                <Route path='/'                 element={<CharactersPage/>}/>
+                <Route path='/characters'       element={<CharactersPage/>}/>
+                <Route path='/characters/:page' element={<CharactersPage/>}/>
+                <Route path='/episodes'         element={<EpisodesPage/>}/>
+                <Route path='/episodes/:page'   element={<EpisodesPage/>}/>
+                <Route path='/locations'        element={<LocationPage/>}/>
+                <Route path='/locations/:page'  element={<LocationPage/>}/>
+                <Route path='/hello'            element={<>Response: {helloText}</>}/>
             </Routes>
 		</>
 	)
