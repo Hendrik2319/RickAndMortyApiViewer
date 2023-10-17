@@ -12,7 +12,8 @@ export default function LocationCard( props: Props ) {
             {props.location.id        && <ValueOutputField name="ID"        value={props.location.id       }/>}
             {props.location.name      && <ValueOutputField name="Name"      value={props.location.name     }/>}
             {props.location.type      && <ValueOutputField name="Type"      value={props.location.type     }/>}
-            {props.location.dimension && <ValueOutputField name="dimension" value={props.location.dimension}/>}
+            {props.location.dimension && <ValueOutputField name="Dimension" value={props.location.dimension}/>}
+            {props.location.residents && <ValueOutputField name="Residents" value={props.location.residents.length + " Residents"}/>}
         </div>
     )
 }

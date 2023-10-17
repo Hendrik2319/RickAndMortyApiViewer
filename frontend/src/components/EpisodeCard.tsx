@@ -10,10 +10,11 @@ export default function EpisodeCard( props:Props ) {
     
     return (
         <div className="ItemCard">
-            {props.episode.episode  && <ValueOutputField name="Episode"  value={props.episode.episode }/>}
-            {props.episode.id       && <ValueOutputField name="ID"       value={props.episode.id      }/>}
-            {props.episode.name     && <ValueOutputField name="Name"     value={props.episode.name    }/>}
-            {props.episode.air_date && <ValueOutputField name="Air Date" value={props.episode.air_date}/>}
+            {props.episode.episode    && <ValueOutputField name="Episode"    value={props.episode.episode }/>}
+            {props.episode.id         && <ValueOutputField name="ID"         value={props.episode.id      }/>}
+            {props.episode.name       && <ValueOutputField name="Name"       value={props.episode.name    }/>}
+            {props.episode.air_date   && <ValueOutputField name="Air Date"   value={props.episode.air_date}/>}
+            {props.episode.characters && <ValueOutputField name="Characters" value={props.episode.characters.length + " Characters"}/>}
         </div>
     )
 }
